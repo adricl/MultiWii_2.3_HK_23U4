@@ -390,7 +390,7 @@ uint16_t readRawRC(uint8_t chan) {
   #else
     uint8_t oldSREG;
     oldSREG = SREG; cli(); // Let's disable interrupts
-    data = rcValue[rcChannel[chan]]; // Let's copy the data Atomically
+    data = (rcValue[rcChannel[chan]] * 1.4) - 600 ; // Let's copy the data Atomically // I changed this ###############################################
     SREG = oldSREG;        // Let's restore interrupt state
   #endif
   return data; // We return the value correctly copied when the IRQ's where disabled
@@ -432,7 +432,7 @@ void computeRC() {
         #if defined(FAILSAFE)
           failsafeCnt = 0;
         #endif
-        if (rcSerial[chan] >900) {rcData[chan] = rcSerial[chan];} // only relevant channels are overridden
+        if (rcSerial[chan] >900) {rcData[chan] = rcSerial[chan];} // only relevant channels are overridden #TODO OG CODE
       }
     }
   #endif
