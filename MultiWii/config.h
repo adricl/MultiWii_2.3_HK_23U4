@@ -35,8 +35,8 @@
     //#define GIMBAL
     //#define BI
     //#define TRI
-    #define QUADP
-    //#define QUADX
+    //#define QUADP
+    #define QUADX
     //#define Y4
     //#define Y6
     //#define HEX6
@@ -686,7 +686,7 @@
        Convert the degree+minutes into decimal degree by ==> degree+minutes*(1/60)
        Note the sign on declination it could be negative or positive (WEST or EAST) */
     //#define MAG_DECLINATION  3.96f              //For Budapest Hungary.
-    #define MAG_DECLINATION  11.55f   //(**)
+    #define MAG_DECLINATION  11.56f   //(**)
 
     #define GPS_LEAD_FILTER                      // Adds a forward predictive filterig to compensate gps lag. Code based on Jason Short's lead filter implementation
     
