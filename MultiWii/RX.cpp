@@ -390,7 +390,7 @@ uint16_t readRawRC(uint8_t chan) {
   #else
     uint8_t oldSREG;
     oldSREG = SREG; cli(); // Let's disable interrupts
-    data = (rcValue[rcChannel[chan]] * 1.4) - 600 ; // Let's copy the data Atomically // I changed this ###############################################
+    data = rcValue[rcChannel[chan]]; // Let's copy the data Atomically
     SREG = oldSREG;        // Let's restore interrupt state
   #endif
   return data; // We return the value correctly copied when the IRQ's where disabled
@@ -424,15 +424,17 @@ void computeRC() {
         rcDataMean[chan] = 0;
         for (a=0;a<4;a++) rcDataMean[chan] += rcData4Values[chan][a];
         rcDataMean[chan]= (rcDataMean[chan]+2)>>2;
-        if ( rcDataMean[chan] < (uint16_t)rcData[chan] -3)  rcData[chan] = rcDataMean[chan]+2;
-        if ( rcDataMean[chan] > (uint16_t)rcData[chan] +3)  rcData[chan] = rcDataMean[chan]-2;
+        if ( rcDataMean[chan] < (uint16_t)rcData[chan] -3)  rcData[chan] = ((rcDataMean[chan]+2)) * 1.6 -600;
+        if ( rcDataMean[chan] > (uint16_t)rcData[chan] +3)  rcData[chan] = ((rcDataMean[chan]-2)) * 1.6 -600;
       #endif
+      //data = (rcValue[rcChannel[chan]] * 1.4) - 600 ;  // I changed this ###############################################
+      
       if (chan<8 && rcSerialCount > 0) { // rcData comes from MSP and overrides RX Data until rcSerialCount reaches 0
         rcSerialCount --;
         #if defined(FAILSAFE)
           failsafeCnt = 0;
         #endif
-        if (rcSerial[chan] >900) {rcData[chan] = rcSerial[chan];} // only relevant channels are overridden #TODO OG CODE
+        if (rcSerial[chan] >900) {rcData[chan] = (rcSerial[chan] * 1.6 ) - 600;} // only relevant channels are overridden
       }
     }
   #endif
